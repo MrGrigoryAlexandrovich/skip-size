@@ -1,3 +1,10 @@
+export type TSkipState = {
+  readonly skips: TSkip[];
+  readonly selectedSkip: TSkip | null;
+  readonly error: unknown;
+  readonly isLoading: boolean;
+};
+
 export type TSkip = {
   readonly id: number;
   readonly size: number;
@@ -12,6 +19,6 @@ export type TSkip = {
 
 export type TSkipComponent = {
   readonly skip: TSkip;
-  readonly selectedSkipId: number | null;
-  readonly onSelect: (skipId: number) => void;
+  readonly selectedSkip: TSkip | null;
+  readonly onSelect: (skip: TSkip) => void;
 };

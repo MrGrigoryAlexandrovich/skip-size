@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   Box,
   Button,
@@ -10,34 +10,25 @@ import {
 import Skip from "./components/Skip";
 import type { TSkip } from "./models/Skip";
 import { StyledContainer } from "./components/Skip/style";
+import { useDispatch, useSelector } from "react-redux";
+import { getSkipState } from "./store/selectors/Skip";
+import { fetchSkips, setSelectedSkip } from "./store/reducers/Skip";
 
 const App = () => {
-  const [skips, setSkips] = useState<TSkip[]>([]);
-  const [selectedSkipId, setSelectedSkipId] = useState<number | null>(null);
-  const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const { selectedSkip, skips, isLoading } = useSelector(getSkipState);
 
-  useEffect(() => {
-    const fetchSkips = async () => {
-      try {
-        const res = await fetch(
-          "https://app.wewantwaste.co.uk/api/skips/by-location?postcode=NR32&area=Lowestoft"
-        );
-        const data = await res.json();
-        setSkips(data);
-      } catch (err) {
-        console.error("Failed to fetch skips", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchSkips();
-  }, []);
-
-  const handleSelect = (id: number) => {
-    if (id !== selectedSkipId) {
-      setSelectedSkipId(id);
+  const handleSelect = (skip: TSkip) => {
+    if (selectedSkip?.id === skip.id) {
+      dispatch(setSelectedSkip(null));
+    } else {
+      dispatch(setSelectedSkip(skip));
     }
   };
+
+  useEffect(() => {
+    dispatch(fetchSkips());
+  }, []);
 
   return (
     <StyledContainer>
@@ -47,7 +38,7 @@ const App = () => {
       <Typography variant="body2" mb={3}>
         Select the skip size that best suits your needs.
       </Typography>
-      {loading ? (
+      {isLoading ? (
         <Stack
           width="100%"
           alignItems="center"
@@ -61,7 +52,7 @@ const App = () => {
           {skips.map((skip) => (
             <Skip
               skip={skip}
-              selectedSkipId={selectedSkipId}
+              selectedSkip={selectedSkip}
               onSelect={handleSelect}
             />
           ))}
@@ -71,9 +62,9 @@ const App = () => {
         <Button variant="outlined">Back</Button>
         <Button
           variant="contained"
-          disabled={!selectedSkipId}
+          disabled={!selectedSkip}
           onClick={() => {
-            console.log("Selected skip ID:", selectedSkipId);
+            console.log("Selected skip:", selectedSkip);
           }}
         >
           Continue

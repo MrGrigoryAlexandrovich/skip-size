@@ -3,7 +3,7 @@ import { getTotalPrice } from "../../utils";
 import type { TSkipComponent } from "../../models/Skip";
 import { StyledSizeChip, StyledSkipCard, StyledSkipImage } from "./style";
 
-const Skip = ({ skip, selectedSkipId, onSelect }: TSkipComponent) => (
+const Skip = ({ skip, selectedSkip, onSelect }: TSkipComponent) => (
   <Grid
     key={skip.id}
     size={{
@@ -13,8 +13,8 @@ const Skip = ({ skip, selectedSkipId, onSelect }: TSkipComponent) => (
     }}
   >
     <StyledSkipCard
-      selected={skip.id === selectedSkipId}
-      onClick={() => onSelect(skip.id)}
+      selected={skip.id === selectedSkip?.id}
+      onClick={() => onSelect(skip)}
     >
       <Box position="relative">
         <StyledSkipImage
@@ -46,9 +46,9 @@ const Skip = ({ skip, selectedSkipId, onSelect }: TSkipComponent) => (
       <Button
         fullWidth
         variant="contained"
-        sx={{ mt: 2, opacity: selectedSkipId === skip.id ? 1 : 0.75 }}
+        sx={{ mt: 2, opacity: selectedSkip?.id === skip.id ? 1 : 0.75 }}
       >
-        {selectedSkipId === skip.id ? "Selected" : "Select This Skip"}
+        {selectedSkip?.id === skip.id ? "Selected" : "Select This Skip"}
       </Button>
     </StyledSkipCard>
   </Grid>
