@@ -51,6 +51,7 @@ const App = () => {
         <Grid container spacing={2}>
           {skips.map((skip) => (
             <Skip
+              key={skip.id}
               skip={skip}
               selectedSkip={selectedSkip}
               onSelect={handleSelect}

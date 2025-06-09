@@ -1,6 +1,6 @@
 import axios, { type AxiosPromise } from "axios";
 
-const baseURL = "https://app.wewantwaste.co.uk/api/";
+const baseURL = import.meta.env.VITE_BASE_URL;
 
 export const axiosInstance = axios.create({
   baseURL,
